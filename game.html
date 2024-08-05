@@ -13,46 +13,74 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #282c34; /* 更加现代化的背景颜色 */
+            color: #ffffff;
         }
 
         h1 {
             font-size: 36px;
             margin-bottom: 20px;
+            color: #61dafb; /* 更醒目的标题颜色 */
         }
 
         #gameCanvas {
-            background-color: #000;
-            border: 1px solid #333;
+            background-color: #1c1c1c;
+            border: 2px solid #444; /* 更加厚重的边框 */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* 盒子阴影 */
         }
 
-        .back-button {
-            display: inline-block;
+        .button-container {
+            display: flex;
+            justify-content: center;
             margin-top: 20px;
+        }
+
+        .game-button {
+            margin: 0 10px;
             padding: 10px 20px;
-            background-color: #333;
-            color: white;
+            background-color: #61dafb;
+            color: #282c34;
             text-decoration: none;
             border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        .back-button:hover {
-            background-color: #555;
+        .game-button:hover {
+            background-color: #21a1f1; /* 悬停时更深的颜色 */
         }
+
+        .score {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #ffffff;
+        }
+
     </style>
 </head>
 <body>
     <h1>贪吃蛇小游戏</h1>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <a href="index.html" class="back-button">返回主页</a>
+    <div class="button-container">
+        <button id="startButton" class="game-button">开始游戏</button>
+        <button id="resetButton" class="game-button">复位</button>
+        <a href="index.html" class="game-button">返回主页</a>
+    </div>
+    <div class="score">得分: <span id="score">0</span></div>
 
     <script>
-        // 贪吃蛇游戏逻辑
+        // 游戏变量
         let canvas = document.getElementById('gameCanvas');
         let ctx = canvas.getContext('2d');
         let box = 20;
         let snake = [];
+        let score = 0;
+        let speed = 150; // 调整速度，使游戏更慢
+        let game;
+
+        // 初始化蛇
         snake[0] = { x: 10 * box, y: 10 * box };
 
         let food = {
@@ -60,7 +88,7 @@
             y: Math.floor(Math.random() * 20) * box
         };
 
-        let d;
+        let d; // 蛇的方向
         document.addEventListener('keydown', direction);
 
         function direction(event) {
@@ -85,15 +113,17 @@
         }
 
         function draw() {
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = '#1c1c1c'; // 背景颜色
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // 绘制蛇
             for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = (i == 0) ? '#0f0' : '#fff';
+                ctx.fillStyle = (i == 0) ? '#61dafb' : '#28a745'; // 蛇头与蛇身颜色不同
                 ctx.fillRect(snake[i].x, snake[i].y, box, box);
             }
 
-            ctx.fillStyle = '#f00';
+            // 绘制食物
+            ctx.fillStyle = '#e63946';
             ctx.fillRect(food.x, food.y, box, box);
 
             let snakeX = snake[0].x;
@@ -104,7 +134,10 @@
             if (d == 'RIGHT') snakeX += box;
             if (d == 'DOWN') snakeY += box;
 
+            // 检查蛇是否吃到食物
             if (snakeX == food.x && snakeY == food.y) {
+                score++;
+                document.getElementById('score').innerText = score;
                 food = {
                     x: Math.floor(Math.random() * 20) * box,
                     y: Math.floor(Math.random() * 20) * box
@@ -115,15 +148,38 @@
 
             let newHead = { x: snakeX, y: snakeY };
 
+            // 检查游戏结束条件
             if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
                 clearInterval(game);
-                alert('游戏结束');
+                alert('游戏结束! 您的得分: ' + score);
             }
 
             snake.unshift(newHead);
         }
 
-        let game = setInterval(draw, 100);
+        // 开始游戏按钮逻辑
+        document.getElementById('startButton').addEventListener('click', function() {
+            if (!game) { // 防止多次点击
+                game = setInterval(draw, speed);
+            }
+        });
+
+        // 复位按钮逻辑
+        document.getElementById('resetButton').addEventListener('click', function() {
+            clearInterval(game);
+            game = null;
+            score = 0;
+            document.getElementById('score').innerText = score;
+            snake = [{ x: 10 * box, y: 10 * box }];
+            d = undefined;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            food = {
+                x: Math.floor(Math.random() * 20) * box,
+                y: Math.floor(Math.random() * 20) * box
+            };
+            draw();
+        });
+
     </script>
 </body>
 </html>
