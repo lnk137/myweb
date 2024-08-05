@@ -1,0 +1,63 @@
+body {
+    margin: 0; /* 移除默认边距 */
+    padding: 0; /* 移除默认内边距 */
+    background-color: #f5f5f5; /* 背景颜色 */
+}
+
+.header-container {
+    display: flex; /* 将父容器设为Flex容器 */
+    justify-content: center; /* 水平方向居中 */
+    align-items: center; /* 垂直方向居中 */
+    height: 10vh; /* 高度为视口的10% */
+    width: 100%; /* 宽度撑满整个视口 */
+    background-color: rgb(159, 159, 159);
+    border: 1px solid rgb(0, 0, 0); /* 黑色边框 */
+}
+
+.header {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.main-container {
+    display: flex; /* 使用Flex布局 */
+    height: 90vh; /* 占据剩余的视口高度 */
+    background-color: #fff;
+}
+
+.sidebar {
+    display: flex; /* 将侧边栏设为Flex容器 */
+    flex-direction: column; /* 垂直排列元素 */
+    justify-content: flex-start; /* 顶部对齐 */
+    align-items: stretch; /* 子元素水平撑满父容器 */
+    width: 15%; 
+    background-color: rgb(200, 200, 200); /* 设置侧边栏背景颜色 */
+    padding: 20px; /* 添加内边距 */
+    border-right: 1px solid rgb(0, 0, 0); /* 添加右边框 */
+}
+
+.sidebar p, .game-link {
+    display: block; /* 设为块级元素 */
+    margin: 0;
+    padding: 20px 0;
+    width: 100%; /* 宽度撑满父容器 */
+    text-align: center;
+    border-bottom: 1px solid #000000; /* 添加底部边框作为分割线 */
+}
+
+.game-link {
+    color: #000; /* 链接文本颜色 */
+    text-decoration: none; /* 移除链接下划线 */
+    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+}
+
+.game-link:hover {
+    background-color: #555; /* 鼠标悬停时的背景颜色 */
+    color: #fff; /* 鼠标悬停时的文本颜色 */
+}
+
+.content {
+    flex-grow: 1; /* 占据剩余空间 */
+    padding: 20px; /* 添加内边距 */
+    background-color: #f0f0f0; /* 设置内容区域背景颜色 */
+}
